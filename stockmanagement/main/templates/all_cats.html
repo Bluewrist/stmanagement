@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Beyond stock management</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Dashboard v1</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <div class="container-fluid ">
+        <div class="row ">
+            <div class="col">
+                {% if messages %}
+                {% for message in messages %}
+                {% if message.tags == "success" %}
+                <div class="alert alert-success">
+                    {{message}}
+                </div>
+                {% endif %}
+                {% if message.tags == "error" %}
+                <div class="alert alert-danger">
+                    {{ message}}
+                </div>
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Products list &amp;</h3>
+
+                        </div>
+                        <a href="{%  url 'add_cat' %}">
+                            <button class="btn btn-danger mt-3 mx-3">ADD CATEGORY</button>
+                        </a>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <div id="example2_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-6"></div>
+                                    <div class="col-sm-12 col-md-6"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <table id="example2"
+                                            class="table table-bordered table-hover dataTable dtr-inline"
+                                            aria-describedby="example2_info">
+                                            <thead>
+                                                <tr>
+                                                    <th class="sorting sorting_asc" tabindex="0"
+                                                        aria-controls="example2" rowspan="1" colspan="1"
+                                                        aria-sort="ascending"
+                                                        aria-label="Rendering engine: activate to sort column descending">
+                                                        Category Name</th>
+
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for p in cats %}
+                                                <tr class="odd">
+                                                    <td>
+                                                        <a href="" class="nav-link">
+                                                            {{ p.name}}
+                                                        </a>
+                                                    </td>
+
+                                                    <td>
+                                                        <a href="" class="nav-link">
+                                                            <span class="badge bg-danger">Delete</span>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="row">
+
+                                    <div class="col-sm-12 col-md-7">
+                                        <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
+                                            <ul class="pagination pagination-sm float-right">
+                                                {% if products.has_previous %}
+                                                <li class="page-item"><a class="page-link"
+                                                        href="?page={{ products.previous_page_number }}">«</a></li>
+                                                {% else %}
+                                                {% endif %}
+                                                {% for i in products.paginator.page_range %}
+                                                {% if i == product_list.number %}
+                                                <li class="page-item"><a class="page-link" href="#">{{ i }}</a></li>
+                                                {% else %}
+                                                <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a>
+                                                </li>
+                                                {% endif %}
+                                                {% endfor %}
+
+                                                {% if products.has_next %}
+                                                <li class="page-item"><a class="page-link"
+                                                        href="?page={{ products.next_page_number }}">»</a></li>
+                                                {% else %}
+
+                                                {% endif %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+</div>
+{% endblock %}

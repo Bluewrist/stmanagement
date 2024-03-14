@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Beyond stock management</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Dashboard v1</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <div class="row">
+        <div class="col-md-10 offset-md-1" data-select2-id="13">
+            {% if messages %}
+            {% for message in messages %}
+            {% if message.tags == "success" %}
+            <div class="alert alert-success">
+                {{message}}
+            </div>
+            {% endif %}
+            {% if message.tags == "error" %}
+            <div class="alert alert-danger">
+                {{ message}}
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-8 offset-md-2">
+            <form action="{%  url 'product_list' %}" method="get">
+                <div class="input-group">
+                    <input type="search" class="form-control form-control-lg" name="q"
+                        placeholder="Search by name or part number">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-primary">
+                            Submit
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header border-transparent">
+                            <h3 class="card-title">Products list &amp;</h3>
+
+                        </div>
+                        <a href="{%  url 'create_product' %}">
+                            <button class="btn btn-danger mt-3 mx-3">ADD PRODUCT</button>
+                        </a>
+                        <!-- /.card-header -->
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table m-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Product Name</th>
+                                            <th>Part Number</th>
+                                            <th>Pachacing Price</th>
+                                            <th>selling price</th>
+                                            <th>quantity</th>
+                                            <th>Reorder level</th>
+                                            <th>Delete</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for p in products %}
+                                        <tr class="odd">
+                                            <td>
+                                                <a href="{% url 'product_detail' p.pk  %}" class="nav-link">
+                                                    {{ p.part_name}}
+                                                </a>
+                                            </td>
+                                            <td>{{ p.part_number }}</td>
+                                            <td>{{ p.purchacing_price }}</td>
+                                            <td>{{ p.price }}</td>
+                                            <td>{{ p.reorder_level }}</td>
+                                            <td>{{ p.qyt }}</td>
+                                            <td>
+                                                <a href="{% url 'deleteRoom' p.id %}" class="nav-link">
+                                                    <span class="badge bg-danger">Delete</span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-sm-12 col-md-7">
+                                <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
+                                    <ul class="pagination pagination-sm float-right">
+                                        {% if products.has_previous %}
+                                        <li class="page-item"><a class="page-link"
+                                                href="?page={{ products.previous_page_number }}">«</a></li>
+                                        {% else %}
+                                        {% endif %}
+                                        {% for i in products.paginator.page_range %}
+                                        {% if i == product_list.number %}
+                                        <li class="page-item"><a class="page-link" href="#">{{ i }}</a></li>
+                                        {% else %}
+                                        <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a>
+                                        </li>
+                                        {% endif %}
+                                        {% endfor %}
+
+                                        {% if products.has_next %}
+                                        <li class="page-item"><a class="page-link"
+                                                href="?page={{ products.next_page_number }}">»</a></li>
+                                        {% else %}
+
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+        <!-- /.col -->
+
+<!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+</div>
+{% endblock %}

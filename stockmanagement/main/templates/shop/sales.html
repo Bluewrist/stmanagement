@@ -1,0 +1,122 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Beyond stock management</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active">Dashboard v1</li>
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+  <div class="row">
+    <div class="col-md-10 offset-md-1" data-select2-id="13">
+
+      <form method="post" class="form-group">
+        {% csrf_token %}
+        <div class="card-body">
+         {{ form|crispy }}
+        </div>
+            <button type="submit" class="btn btn-primary ">
+              SUBMIT
+            </button>
+          
+      </form>
+    </div>
+  </div>
+
+        
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header border-transparent">
+              <h3 class="card-title">Products in Store</h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table m-0">
+                  <thead>
+                  <tr>
+                    <th>Part Number</th>
+                    <th>Part Name</th>
+                    <th>Price</th>
+                    <th>quantity</th>
+                    <th>total</th>
+                    <th>Date</th>
+                    <th></th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                    {% for  t in sale %}
+                  <tr>
+                    <td><a href="pages/examples/invoice.html">{{ t.product.product.part_number}}</a></td>
+                    <td>{{ t.product.product.part_name }}</td>
+                    <td>USD {{ t.product.product.price}}.00</td>
+                    <td>
+                      <a href="pages/examples/invoice.html">{{ t.qty }}</a>
+                    </td>
+                    <td>USD {{ t.total }}.00</td>
+                    <td>{{ t.date }}</td>
+                    
+                  </tr>
+                  {%  endfor %}
+                  
+                  
+          
+                  </tbody>
+                </table>
+              </div>
+              <div class="col-6">
+                
+
+                <div class="table-responsive">
+                  <table class="table">
+                    <tbody><tr>
+                      <th style="width:50%">Items Sold:</th>
+                      <td>{{ total.qty__sum  }} items</td>
+                    </tr>
+                   
+                    <tr>
+                      <th>Total Sales:</th>
+                      <td>USD: {{ total_sales|floatformat:2 }}</td>
+                    </tr>
+                  </tbody></table>
+                </div>
+              </div>
+              <!-- /.table-responsive -->
+            </div>
+          </div>
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+  </section>
+  <!-- /.content -->
+</div>
+{% endblock %}

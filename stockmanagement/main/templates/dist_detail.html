@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="content-wrapper" style="min-height: 2646.44px;">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>{{ dist.name}}</h1>
+        </div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active">Distributer Detail</li>
+          </ol>
+        </div>
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+  <div class="container-fluid ">
+    <div class="row ">
+      <div class="col">
+        {% if messages %}
+        {% for message in messages %}
+        {% if message.tags == "success" %}
+        <div class="alert alert-success">
+          {{message}}
+        </div>
+        {% endif %}
+        {% if message.tags == "error" %}
+        <div class="alert alert-danger">
+          {{ message}}
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Main content -->
+  <section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Distributer Detail</h3>
+
+        <div class="card-tools">
+          <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+            <i class="fas fa-minus"></i>
+          </button>
+          <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-12 col-md-12 col-lg-12 order-2 order-md-1">
+            <div class="row">
+              <div class="col-12 col-sm-4">
+                <div class="info-box bg-light">
+                  <div class="info-box-content">
+                    <span class="info-box-text text-center text-muted">Total stock Value</span>
+                    <span class="info-box-number text-center text-muted mb-0">2300</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-4">
+                <div class="info-box bg-light">
+                  <div class="info-box-content">
+                    <span class="info-box-text text-center text-muted">Number of items in stock</span>
+                    <span class="info-box-number text-center text-muted mb-0">2000</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-4">
+                <div class="info-box bg-light">
+                  <div class="info-box-content">
+                    <span class="info-box-text text-center text-muted">Estimated project duration</span>
+                    <span class="info-box-number text-center text-muted mb-0">20</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <h4>IN STOCK</h4>
+                <div class="post">
+                  <div class="invoice p-3 mb-3">
+                    <div class="row">
+                      <div class="col-12 table-responsive">
+                        <table class="table table-striped">
+                          <thead>
+                            <tr>
+                              <th>Qty</th>
+                              <th>Product Name</th>
+                              <th>Serial #</th>
+                              <th>Price</th>
+                              <th>Total</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for p in items %}
+                            <tr>
+                              <td>{{p.quantity }}</td>
+                              <td>
+                                <a href="{% url 'product_detail' p.pk  %}" class="nav-link">
+                                  {{ p.product.part_name}}
+                                </a>
+                              </td>
+                              <td>{{ p.product.part_number }}</td>
+                              <td>${{ p.product.price }}:00</td>
+                              <td>${{ p.get_total }}:00</td>
+                              
+                              <td>
+                                <a href="" class="nav-link">
+                                  <button class="btn btn-danger">Delete</button>
+                                </a>
+                              </td>
+                            </tr>
+                            {% endfor %}
+
+
+                          </tbody>
+                        </table>
+                      </div>
+                      <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+
+
+
+                    <!-- this row will not appear when printing -->
+                    <div class="row no-print">
+                      <div class="col-12">
+                        <a href="invoice-print.html" rel="noopener" target="_blank" class="btn btn-default"><i
+                            class="fas fa-print"></i> Print</a>
+                        <button type="button" class="btn btn-success float-right"><i class="far fa-credit-card"></i>
+                          Submit
+                          Payment
+                        </button>
+                        <button type="button" class="btn btn-primary float-right" style="margin-right: 5px;">
+                          <i class="fas fa-download"></i> Generate PDF
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+
+  </section>
+  <!-- /.content -->
+</div>
+<script>
+  let updateBtns = document.getElementsByClassName('update-cart');
+
+  for (i = 0; i < updateBtns.length; i++) {
+    updateBtns[i].addEventListener('click', function () {
+      var productId = this.dataset.product
+      var action = this.dataset.action
+      updateUserOrder(productId, action)
+    })
+  }
+
+
+  function updateUserOrder(productId, action) {
+    console.log('User is logged in , sending data..')
+    var url = '/updateStore/{{ dist.id }}/'
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrftoken,
+      },
+      body: JSON.stringify({ 'productId': productId, 'action': action })
+    })
+
+      .then((response) => {
+        return response.json()
+      })
+
+      .then((data) => {
+        console.log('data:', data)
+        location.reload()
+      })
+  }
+</script>
+{% endblock %}
